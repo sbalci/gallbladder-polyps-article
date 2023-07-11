@@ -1,0 +1,44 @@
+```{r}
+library(magrittr)
+
+Data_Plos_One_20230711 <- readxl::read_excel("Data_Plos_One_20230711.xlsx")
+
+Data_Plos_One_20230711 <- Data_Plos_One_20230711 %>% 
+  dplyr::rename(
+    NNPvsNP = `NNP vs NP`
+  )
+
+
+```
+
+```{r}
+Data_Plos_One_20230711 <- Data_Plos_One_20230711 %>% 
+  dplyr::mutate(
+    ICPNvsNNP = 
+      dplyr::case_when(
+        Dx == "ICPN" ~ "ICPN",
+        NNPvsNP == "NNP" ~ "NNP",
+        TRUE ~ NA_character_
+      )
+  )
+```
+
+
+```{r}
+Data_Plos_One_20230711 <- Data_Plos_One_20230711 %>% 
+  dplyr::mutate(
+    PolypoidInvasionvsNNP = 
+      dplyr::case_when(
+        Dx == "Polypoid invasive carcinoma" ~ "PolypoidInvasion",
+        NNPvsNP == "NNP" ~ "NNP",
+        TRUE ~ NA_character_
+      )
+  )
+
+```
+
+```{r}
+rio::export(x = Data_Plos_One_20230711,
+            file = "Data_Plos_One_20230711.xlsx")
+```
+
